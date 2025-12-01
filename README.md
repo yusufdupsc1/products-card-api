@@ -1,4 +1,4 @@
-# Products Card • 2025 Aesthetic
+# ecommerce-velora-storefront
 
 A pixel-perfect storefront mock with a bright gradient backdrop, glass cards, and fully offline assets. Everything (markup shell, data, and imagery) ships locally for zero external requests.
 

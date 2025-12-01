@@ -38,7 +38,7 @@ const buildShell = () => {
       <nav class="nav">
         <div class="nav__brand">
           <span class="dot"></span>
-          <span class="word">Anon</span>
+          <span class="word">Velora</span>
         </div>
         <div class="nav__links">
           <a href="#hero">Home</a>
@@ -236,7 +236,13 @@ const buildShell = () => {
     <div class="modal" id="modal" aria-hidden="true">
       <div class="modal__backdrop"></div>
       <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <button class="modal__close" aria-label="Back to home">← Back</button>
+        <div class="modal__controls">
+          <button class="modal__action modal__back" aria-label="Back to home">
+            <img src="assets/icon-arrow-left.svg" class="icon" alt="" />
+            Back
+          </button>
+          <button class="modal__action modal__close" aria-label="Close modal">×</button>
+        </div>
         <div class="modal__content">
           <div class="modal__image">
             <img alt="" />
@@ -273,7 +279,7 @@ const buildShell = () => {
     </section>
 
     <footer class="footer">
-      <span>Built as a pixel-perfect vanilla JS storefront demo.</span>
+              <span>Built as a pixel-perfect Velora storefront demo.</span>
       <span id="status"></span>
     </footer>
   `;
@@ -302,7 +308,11 @@ const wireEvents = () => {
       return;
     }
 
-    if (event.target.classList.contains("modal__backdrop") || event.target === els.modalClose) {
+    if (
+      event.target.classList.contains("modal__backdrop") ||
+      event.target.closest(".modal__close") ||
+      event.target.closest(".modal__back")
+    ) {
       closeModal();
       return;
     }

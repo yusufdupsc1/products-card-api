@@ -775,7 +775,7 @@ body {
   place-items: center;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.16s ease;
   z-index: 12;
 }
 
@@ -797,42 +797,90 @@ body {
   border-radius: 20px;
   border: 1px solid var(--stroke);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
-  padding: 18px;
+  padding: 20px;
   display: grid;
   gap: 12px;
-  transform: translateY(10px);
-  transition: transform 0.2s ease;
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.16s ease-out, opacity 0.16s ease;
+  will-change: transform, opacity;
+  max-height: 90vh;
+  overflow: hidden;
 }
 
 .modal.open .modal__dialog {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+}
+
+.modal__controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  padding-bottom: 8px;
+  background: linear-gradient(180deg, #fff 75%, rgba(255, 255, 255, 0));
+  z-index: 2;
+}
+
+.modal__action {
+  border: 1px solid var(--stroke);
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.2;
+  min-width: 44px;
+}
+
+.modal__back {
+  color: var(--text);
+}
+
+.modal__back img {
+  width: 16px;
+  height: 16px;
 }
 
 .modal__close {
   align-self: start;
   width: fit-content;
-  border: none;
-  background: none;
-  font-weight: 800;
-  cursor: pointer;
+  background: #fff;
+  font-size: 16px;
+  line-height: 1;
+  min-width: 44px;
+  justify-content: center;
 }
 
 .modal__content {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 14px;
-  align-items: center;
+  gap: 18px;
+  align-items: start;
+  max-height: calc(90vh - 90px);
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
 .modal__image {
   background: linear-gradient(135deg, #fff1f5, #f7e2ff);
   border-radius: 14px;
   padding: 16px;
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
 
 .modal__image img {
   width: 100%;
-  height: 260px;
+  height: 100%;
+  max-height: 280px;
   object-fit: contain;
 }
 
@@ -877,6 +925,17 @@ body {
   content: "★";
   color: var(--accent);
   margin-right: 6px;
+}
+
+@media (max-width: 720px) {
+  .modal__content {
+    grid-template-columns: 1fr;
+    max-height: calc(90vh - 120px);
+  }
+
+  .modal__image img {
+    max-height: 220px;
+  }
 }
 
 @media (max-width: 1180px) {

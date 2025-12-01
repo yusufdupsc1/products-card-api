@@ -195,4 +195,5 @@ export const closeModal = () => {
   els.modal.classList.remove("open");
   els.modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
+  window.location.hash = "#hero";
 };
