@@ -1,0 +1,37 @@
+export const els = {};
+
+export const bindDom = () => {
+  Object.assign(els, {
+    grid: document.getElementById("product-grid"),
+    tpl: document.getElementById("card-template"),
+    status: document.getElementById("status"),
+    refresh: document.getElementById("refresh"),
+    toast: document.getElementById("toast"),
+    loading: document.getElementById("loading"),
+    modal: document.getElementById("modal"),
+    modalImg: document.querySelector(".modal__image img"),
+    modalChip: document.querySelector(".modal__chip"),
+    modalTitle: document.querySelector(".modal__title"),
+    modalDesc: document.querySelector(".modal__desc"),
+    modalPrice: document.querySelector(".modal__price"),
+    modalRating: document.querySelector(".modal__rating"),
+    modalClose: document.querySelector(".modal__close"),
+    modalAdd: document.querySelector(".modal__info [data-add]"),
+    cartCount: document.getElementById("cart-count"),
+    cartItems: document.getElementById("cart-items"),
+    cartTotal: document.getElementById("cart-total"),
+    cartItemsCount: document.getElementById("cart-items-count"),
+    cartSummary: document.getElementById("cart-summary"),
+    cartSummaryItems: document.getElementById("cart-summary-items"),
+    cartSummaryTotal: document.getElementById("cart-summary-total"),
+    cartSummaryClose: document.getElementById("cart-summary-close"),
+    cartSummaryToggle: document.getElementById("cart-summary-toggle"),
+    dealCard: document.getElementById("deal-card"),
+    newProducts: document.getElementById("new-products"),
+    newArrivals: document.querySelector("#new-arrivals .mini-list"),
+    trending: document.querySelector("#trending .mini-list"),
+    topRated: document.querySelector("#top-rated .mini-list"),
+    bestSellers: document.querySelector("#best-sellers .mini-list"),
+    hotOffers: document.getElementById("hot-offers"),
+  });
+};

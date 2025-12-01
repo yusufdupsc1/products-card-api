@@ -1,28 +1,23 @@
 # Products Card • 2025 Aesthetic
 
-A modern, gradient-glass product card gallery that pulls live JSON data (powered by [DummyJSON Products](https://dummyjson.com/products)). Built as a single-page showcase for storefront previews or inspiration boards.
+A pixel-perfect storefront mock with a bright gradient backdrop, glass cards, and fully offline assets. Everything (markup shell, data, and imagery) ships locally for zero external requests.
 
 ## Features
-- 2025-inspired visual language: layered gradients, glassmorphism, bold type pairing (Space Grotesk + Manrope).
-- Live product feed from `https://dummyjson.com/products?limit=12` with graceful fallback data.
-- Responsive grid with hover depth, focus states, and micro-interactions.
-- Lightweight, vanilla stack (HTML/CSS/JS) ready to drop into any static host.
+- Curated local catalog (12 items) with hero, deal-of-the-day, arrivals, trending, top-rated, hot offers, and cart summary.
+- Modular vanilla JS: `api` (local catalog), `state` (products/cart), `ui` (rendering), `dom` (bindings), `utils`, and `main` orchestrator.
+- Minimal HTML shell (`index.html` only mounts `#app` and scripts); layout is generated dynamically.
+- All imagery and favicon live in `assets/`; no external fonts or CDN hits.
 
 ## Getting Started
-1) Open `index.html` in your browser (double-click or serve via any static server).  
-2) Click **Refresh feed** to re-fetch the latest JSON products.  
-3) Optional: replace `API` in `js/script.js` with your own endpoint that returns an array of products (adjust mapping if fields differ).
+1) Serve or open `index.html` in a browser.  
+2) Hit **Refresh feed** to re-seed the layout from the local catalog.  
+3) Add to cart and open modals to verify interactions.
 
 ## Project Structure
-- `index.html` — markup and template for cards.
-- `css/style.css` — visual system (colors, spacing, animations, responsive grid).
-- `js/script.js` — data fetching, fallback dataset, and rendering logic.
-
-## Customization Tips
-- Colors & glow: adjust CSS variables at the top of `css/style.css`.
-- Card content: extend the template in `index.html` and map more fields inside `renderProducts` in `js/script.js`.
-- Data source: point `API` to your own JSON link; keep `title`, `price`, `category`, `description`, `image`, and `rating` fields or adapt the mapper.
-
-## Notes
-- The fallback dataset ensures the layout still looks great if the live API rate-limits or you develop offline.
-- No build step required; everything runs in the browser.
+- `index.html` — minimal mount point + stylesheet/script.
+- `css/style.css` — visual system (colors, spacing, responsive grid).
+- `js/main.js` — builds the layout and wires events.
+- `js/ui.js` — rendering for lists, grids, hero blocks, modal, and cart.
+- `js/state.js` — catalog state and cart storage.
+- `js/api.js` — supplies the local product catalog.
+- `assets/` — hero, product shots, and favicon.
