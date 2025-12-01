@@ -9,7 +9,22 @@ const els = {
   toggle: document.querySelector(".nav__toggle"),
   toast: document.getElementById("toast"),
   loading: document.getElementById("loading"),
+  modal: document.getElementById("modal"),
+  modalImg: document.querySelector(".modal__image img"),
+  modalChip: document.querySelector(".modal__chip"),
+  modalTitle: document.querySelector(".modal__title"),
+  modalDesc: document.querySelector(".modal__desc"),
+  modalPrice: document.querySelector(".modal__price"),
+  modalRating: document.querySelector(".modal__rating"),
+  modalClose: document.querySelector(".modal__close"),
+  cartCount: document.getElementById("cart-count"),
+  cartItems: document.getElementById("cart-items"),
+  cartTotal: document.getElementById("cart-total"),
+  cartItemsCount: document.getElementById("cart-items-count"),
 };
+
+let currentProducts = [];
+const cart = [];
 
 // Backup products shown if the live API fails
 const FALLBACK = [
@@ -113,8 +128,9 @@ const skeletons = (n = 6) => {
 
 // Render an array of products into cards
 const render = (items) => {
+  currentProducts = items;
   els.grid.innerHTML = "";
-  items.forEach((item) => {
+  items.forEach((item, idx) => {
     const card = els.tpl.content.cloneNode(true);
     card.querySelector("img").src = item.image;
     card.querySelector("img").alt = item.title;
@@ -125,8 +141,26 @@ const render = (items) => {
     const count = item.rating?.count ?? 120;
     card.querySelector(".rating").textContent = `${rating.toFixed(1)} (${count})`;
     card.querySelector(".price").textContent = price(item.price);
+    const cardEl = card.querySelector(".card");
+    cardEl.dataset.index = idx;
+    cardEl.querySelector(".btn")?.addEventListener("click", (event) => {
+      event.stopPropagation();
+      addToCart(item);
+    });
     els.grid.appendChild(card);
   });
+};
+
+// Add a product to cart and update badge
+const addToCart = (product) => {
+  if (!product) return;
+  cart.push(product);
+  if (els.cartCount) {
+    els.cartCount.textContent = cart.length;
+  }
+  renderCart();
+  showToast("Added to cart");
+  window.location.hash = "#cart";
 };
 
 // Fetch live data with graceful fallback
@@ -159,6 +193,32 @@ const load = async () => {
   setLoading(false);
 };
 
+// Open modal with selected product
+const openModal = (product) => {
+  if (!product || !els.modal) return;
+  els.modalImg.src = product.image;
+  els.modalImg.alt = product.title;
+  els.modalChip.textContent = product.category;
+  els.modalTitle.textContent = product.title;
+  els.modalDesc.textContent = product.description;
+  const rating = product.rating?.rate ?? 4.5;
+  const count = product.rating?.count ?? 120;
+  els.modalRating.textContent = `${rating.toFixed(1)} (${count})`;
+  els.modalPrice.textContent = price(product.price);
+  els.modal.classList.add("open");
+  els.modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+};
+
+// Close modal and return focus to page
+const closeModal = () => {
+  if (!els.modal) return;
+  els.modal.classList.remove("open");
+  els.modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  window.location.hash = "#home";
+};
+
 // Wire up buttons and nav toggle
 els.refresh.addEventListener("click", load);
 document.addEventListener("DOMContentLoaded", load);
@@ -174,3 +234,51 @@ els.nav?.querySelectorAll(".nav__links a").forEach((link) => {
     els.toggle?.setAttribute("aria-expanded", "false");
   });
 });
+
+// Open modal when a card is clicked
+els.grid.addEventListener("click", (event) => {
+  const card = event.target.closest(".card");
+  if (!card || !card.dataset.index) return;
+  openModal(currentProducts[Number(card.dataset.index)]);
+});
+
+els.modalClose?.addEventListener("click", closeModal);
+
+els.modal?.addEventListener("click", (event) => {
+  if (event.target.classList.contains("modal__backdrop")) {
+    closeModal();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && els.modal?.classList.contains("open")) {
+    closeModal();
+  }
+});
+
+// Render cart items list
+const renderCart = () => {
+  if (!els.cartItems) return;
+  els.cartItems.innerHTML = "";
+  if (!cart.length) {
+    els.cartItems.innerHTML = '<p class="cart-item__meta">Cart is empty. Add something you like.</p>';
+  } else {
+    cart.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "cart-item";
+      row.innerHTML = `
+        <img src="${item.image}" alt="${item.title}">
+        <div>
+          <p class="cart-item__title">${item.title}</p>
+          <p class="cart-item__meta">${item.category}</p>
+        </div>
+        <span class="cart-item__price">${price(item.price)}</span>
+      `;
+      els.cartItems.appendChild(row);
+    });
+  }
+
+  const total = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
+  if (els.cartTotal) els.cartTotal.textContent = price(total);
+  if (els.cartItemsCount) els.cartItemsCount.textContent = `${cart.length} item${cart.length === 1 ? "" : "s"}`;
+};
